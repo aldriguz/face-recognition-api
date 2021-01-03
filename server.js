@@ -65,7 +65,7 @@ app.post('/signin', (req, res) => {
 	if(params.email === database.users[0].email &&
 		params.password === database.users[0].password){
 		
-		res.json('success');
+		res.json(database.users[0]);
 	}
 
 	res.status(400).json('failed');
