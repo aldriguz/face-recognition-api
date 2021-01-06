@@ -34,40 +34,15 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(cors());
 
-let id = 3;
-
-//temporal object until get DB working
-const database = {
-	users: [
-		{
-			id: 1,
-			name: 'kevin',
-			email: 'alama@mail.com',
-			password: 'pass123',
-			entries: 0,
-			joinedAt: new Date()
-		},
-		{
-			id: 2,
-			name: 'lady',
-			email: 'lady@mail.com',
-			password: 'passs',
-			entries: 0,
-			joinedAt: new Date()
-		}
-
-	],
-	login: [
-	{
-		id: '1',
-		hash: '$2a$10$QwZqAV44G6ROKtNTz4PG.exC4TQ12dsYIhfCNiIRT545qX0bj6UTa',
-		email: ''
-
-	}]
-}
 
 app.get('/', (req, res) => {
-	res.send(database.users);
+	db.select('*').from('users')
+		.then(users => {
+			res.json(users);
+		})
+		.catch(err => {
+			res.status(500).json('Error when loading data');
+		})
 });
 
 //SIGNIN
