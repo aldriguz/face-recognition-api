@@ -50,15 +50,11 @@ app.get('/', (req, res) => {
 		})
 });
 
+
+
 app.post('/signin', (req, res) => { singin.handleSignin(req, res, db, bcrypt) })
-
 app.post('/register', (req, res) => {register.handleRegister(req, res, db, bcrypt)});
-
 app.get('/profile/:id',  (req, res) => { profile.handleRegister(req, res, db) } );
-
 app.put('/image', (req, res) => { image.handleImage(req, res, db) } )
-
-app.listen(4000, () => {
-
-});
+app.listen(4000, () => { });
 
