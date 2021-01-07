@@ -17,6 +17,9 @@ const cors = require('cors');
 const knex = require('knex')
 
 const register = require('./controllers/register')
+const singin = require('./controllers/singin')
+const profile = require('./controllers/profile')
+const image = require('./controllers/image')
 
 const db = knex({
 	client: 'pg',
@@ -47,68 +50,13 @@ app.get('/', (req, res) => {
 		})
 });
 
-//SIGNIN
-app.post('/signin', (req, res) => {
+app.post('/signin', (req, res) => { singin.handleSignin(req, res, db, bcrypt) })
 
-	const params = req.body;
-
-	db.select('email', 'hash').from('logins')
-		.where('email', '=', params.email)
-		.then(data => {
-			const isValid = bcrypt.compareSync(params.password, data[0].hash);
-			if(isValid){
-				return db.select('*').from('users')
-					.where('email', '=', params.email)
-					.then(users => {
-						res.json(users[0])
-					})
-					.catch(err => {
-						res.status(500).json('Error when load data')
-					})
-			} else {
-				res.status(400).json('Worng credentials, try again')	
-			}
-		})
-		.catch(err => {
-			console.log(err);
-			res.status(400).json('Worng credentials')	
-		})
-		
-})
-
-//REGISTER
 app.post('/register', (req, res) => {register.handleRegister(req, res, db, bcrypt)});
 
+app.get('/profile/:id',  (req, res) => { profile.handleRegister(req, res, db) } );
 
-app.get('/profile/:id', (req, res) => {
-	const {id} = req.params;
-
-	db.select('*').from('users').where({id}).then(users => {
-		if(users.length){
-			res.json(users[0]);
-		} else {
-			res.status(404).json('user not found')
-		}		
-	}).catch(err => {
-		res.status(500).json('Error when searching')
-	});
-});
-
-
-app.put('/image', (req, res) => {
-
-	const { id } = req.body;
-		
-	db('users').where('id', '=', id)
-		.increment('entries', 1)
-		.returning('entries')
-		.then(entries => {
-			res.json(entries);
-		})
-		.catch(err => {
-			res.status(400).json('Unable to get entries')
-		});
-})
+app.put('/image', (req, res) => { image.handleImage(req, res, db) } )
 
 app.listen(4000, () => {
 
