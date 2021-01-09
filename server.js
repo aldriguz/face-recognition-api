@@ -41,13 +41,15 @@ app.use(cors());
 
 
 app.get('/', (req, res) => {
-	db.select('*').from('users')
+	res.send('It´s working');
+	/*db.select('*').from('users')
 		.then(users => {
 			res.json(users);
 		})
 		.catch(err => {
 			res.status(500).json('Error when loading data');
 		})
+	*/
 });
 
 
