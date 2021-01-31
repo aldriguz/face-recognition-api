@@ -28,17 +28,19 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 /* prod */
 //const DATABASE_URL = process.env.DATABASE_URL;
 //const PORT = process.env.PORT;
+//const _SLL_ENABLED = true;
 
 /* dev */
-const _DATABASE_URL = process.env.DATABASE_URL;
-const _PORT = process.env.PORT;
+const _DATABASE_URL = "postgresql://postgres:426430@localhost/face_recognition";
+const _PORT = 3000;
+const _SLL_ENABLED = false;
 
 
 const db = knex({
 	client: 'pg',
 	connection: {
 		connectionString : _DATABASE_URL,
-		ssl: true
+		ssl: _SLL_ENABLED
 	}
   });
 
