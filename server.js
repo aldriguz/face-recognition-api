@@ -21,12 +21,23 @@ const singin = require('./controllers/singin')
 const profile = require('./controllers/profile')
 const image = require('./controllers/image')
 
+
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0; 
+
+
+/* prod */
+//const DATABASE_URL = process.env.DATABASE_URL;
+//const PORT = process.env.PORT;
+
+/* dev */
+const _DATABASE_URL = process.env.DATABASE_URL;
+const _PORT = process.env.PORT;
+
 
 const db = knex({
 	client: 'pg',
 	connection: {
-		connectionString : process.env.DATABASE_URL,
+		connectionString : _DATABASE_URL,
 		ssl: true
 	}
   });
@@ -58,7 +69,7 @@ app.post('/register', (req, res) => {register.handleRegister(req, res, db, bcryp
 app.get('/profile/:id',  (req, res) => { profile.handleRegister(req, res, db) } );
 app.put('/image', (req, res) => { image.handleImage(req, res, db) } )
 app.post('/imageUrl', (req, res) => { image.handleApiCall(req, res) } )
-app.listen(process.env.PORT || 4000, () => {
-	console.log('app running at -> ' + process.env.PORT || 4000)
+app.listen(_PORT, () => {
+	console.log('app running at -> ' + _PORT)
  });
 
