@@ -1,13 +1,37 @@
 version: '3.6'
 
 services:
+
+  # Backend
   face-recognition-api:
     container_name: backend
-    # image: node:14.15.4
+    # image: node:14.15.4 # since we use build we dont need this
     build: ./
-    command: npm start
+    command: npm run start:dev
     working_dir: /usr/src/face-recognition-api
+    environment: 
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: face_recognition
+      POSTGRES_HOST: postgres # this is posible by using links
+      PORT: 3000
+    links:
+      - postgres
     ports:
       - "3000:3000"
     volumes:
-      - ./:/usr/src/face-recognition-api
+      - ./:/usr/src/face-recognition-api #this allows to listen tothe changes
+
+  # Postgres
+  postgres:
+    environment: 
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: face_recognition
+      POSTGRES_HOST: postgres # this is posible by using links
+    #container_name: postgres
+    #image: postgres 
+    build: ./postgres
+    ports: 
+      - "5532:5432" # need to expose 5532 because already have another postgres running
+

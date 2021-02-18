@@ -1,3 +1,5 @@
+BEGIN TRANSACTION;
+
 create table users (
 	id serial primary key,
 	name varchar(100) null,
@@ -5,3 +7,5 @@ create table users (
 	entries integer default 0,
 	joined_at timestamp not null
 );
+
+COMMIT;
