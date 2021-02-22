@@ -55,7 +55,8 @@ const db = knex({
 
 const app = express();
 
-console.log('hmmmmsaa');
+console.log('hmmmmsaaa');
+
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(cors());
@@ -77,7 +78,8 @@ app.get('/', (req, res) => {
 
 app.post('/signin', (req, res) => { singin.handleSignin(req, res, db, bcrypt) })
 app.post('/register', (req, res) => {register.handleRegister(req, res, db, bcrypt)});
-app.get('/profile/:id',  (req, res) => { profile.handleRegister(req, res, db) } );
+app.get('/profile/:id',  (req, res) => { profile.handleProfile(req, res, db) } );
+app.post('/profile/:id',  (req, res) => { profile.handleProfileUpdate(req, res, db) } );
 app.put('/image', (req, res) => { image.handleImage(req, res, db) } )
 app.post('/imageUrl', (req, res) => { image.handleApiCall(req, res) } )
 app.listen(_PORT, () => {
