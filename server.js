@@ -20,6 +20,7 @@ const register = require('./controllers/register')
 const singin = require('./controllers/singin')
 const profile = require('./controllers/profile')
 const image = require('./controllers/image')
+const auth = require('./controllers/authorization')
 
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0; 
@@ -55,7 +56,7 @@ const db = knex({
 
 const app = express();
 
-console.log('hmmmmsaaa');
+console.log('running app service...');
 
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
@@ -65,10 +66,10 @@ app.use(cors());
 app.get('/', (req, res) => res.send('It´s working'));
 app.post('/signin', singin.signinAuthentication(db, bcrypt))
 app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) });
-app.get('/profile/:id',  (req, res) => { profile.handleProfile(req, res, db) } );
-app.post('/profile/:id',  (req, res) => { profile.handleProfileUpdate(req, res, db) } );
-app.put('/image', (req, res) => { image.handleImage(req, res, db) } )
-app.post('/imageUrl', (req, res) => { image.handleApiCall(req, res) } )
+app.get('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfile(req, res, db) } );
+app.post('/profile/:id', auth.requireAuth, (req, res) => { profile.handleProfileUpdate(req, res, db) } );
+app.put('/image', auth.requireAuth, (req, res) => { image.handleImage(req, res, db) } )
+app.post('/imageUrl', auth.requireAuth, (req, res) => { image.handleApiCall(req, res) } )
 app.listen(_PORT, () => {
 	console.log('app running at -> ' + _PORT)
  });
