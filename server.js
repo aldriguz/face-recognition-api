@@ -62,22 +62,9 @@ app.use(express.json());
 app.use(cors());
 
 
-app.get('/', (req, res) => {
-	res.send('It´s working');
-	/*db.select('*').from('users')
-		.then(users => {
-			res.json(users);
-		})
-		.catch(err => {
-			res.status(500).json('Error when loading data');
-		})
-	*/
-});
-
-
-
-app.post('/signin', (req, res) => { singin.handleSignin(req, res, db, bcrypt) })
-app.post('/register', (req, res) => {register.handleRegister(req, res, db, bcrypt)});
+app.get('/', (req, res) => res.send('It´s working'));
+app.post('/signin', singin.signinAuthentication(db, bcrypt))
+app.post('/register', (req, res) => { register.handleRegister(req, res, db, bcrypt) });
 app.get('/profile/:id',  (req, res) => { profile.handleProfile(req, res, db) } );
 app.post('/profile/:id',  (req, res) => { profile.handleProfileUpdate(req, res, db) } );
 app.put('/image', (req, res) => { image.handleImage(req, res, db) } )
